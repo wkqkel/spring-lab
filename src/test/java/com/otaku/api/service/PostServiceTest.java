@@ -3,6 +3,7 @@ package com.otaku.api.service;
 import com.otaku.api.domain.Post;
 import com.otaku.api.repository.PostRepository;
 import com.otaku.api.request.PostCreate;
+import com.otaku.api.response.PostResponse;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -56,7 +57,7 @@ class PostServiceTest {
         Long postId = requestPost.getId();
 
         // when
-        Post post = postService.get(postId);
+        PostResponse post = postService.get(postId);
 
         // then
         Assertions.assertNotNull(post);

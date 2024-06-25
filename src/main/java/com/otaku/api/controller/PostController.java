@@ -2,6 +2,7 @@ package com.otaku.api.controller;
 
 import com.otaku.api.domain.Post;
 import com.otaku.api.request.PostCreate;
+import com.otaku.api.response.PostResponse;
 import com.otaku.api.service.PostService;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
@@ -25,8 +26,11 @@ public class PostController {
     }
 
     @GetMapping("posts/{postId}")
-    public Post get(@PathVariable(name = "postId") Long id) {
-        Post post = postService.get(id);
-        return post;
+    public PostResponse get(@PathVariable(name = "postId") Long id) {
+        PostResponse response = postService.get(id);
+
+
+
+        return response;
     }
 }
