@@ -11,6 +11,7 @@ import lombok.extern.slf4j.Slf4j;
 
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Map;
 
 @Slf4j
@@ -25,12 +26,13 @@ public class PostController {
         postService.write(request);
     }
 
-    @GetMapping("posts/{postId}")
+    @GetMapping("/posts/{postId}")
     public PostResponse get(@PathVariable(name = "postId") Long id) {
-        PostResponse response = postService.get(id);
+        return postService.get(id);
+    }
 
-
-
-        return response;
+    @GetMapping("/posts")
+    public List<PostResponse> getList() {
+        return postService.getList();
     }
 }

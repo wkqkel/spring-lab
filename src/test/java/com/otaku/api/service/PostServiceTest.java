@@ -11,6 +11,8 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import java.util.List;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
@@ -22,13 +24,13 @@ class PostServiceTest {
     private PostRepository postRepository;
 
     @BeforeEach
-    void clean(){
+    void clean() {
         postRepository.deleteAll();
     }
 
     @Test
     @DisplayName("글 작성")
-    void test1(){
+    void test1() {
         // given
         PostCreate postCreate = PostCreate.builder()
                 .title("제목입니다.")
@@ -47,7 +49,7 @@ class PostServiceTest {
 
     @Test
     @DisplayName("글 1개 조회")
-    void test2(){
+    void test2() {
         // given
         Post requestPost = Post.builder()
                 .title("foo")
@@ -64,5 +66,26 @@ class PostServiceTest {
         assertEquals(1, postRepository.count());
         assertEquals("foo", post.getTitle());
         assertEquals("bar", post.getContent());
+    }
+
+    @Test
+    @DisplayName("글 여러개 조회")
+    void test3() {
+        // given
+        postRepository.saveAll(List.of(
+                Post.builder()
+                        .title("foo1")
+                        .content("bar1")
+                        .build(),
+                Post.builder()
+                        .title("foo2")
+                        .content("bar2")
+                        .build()));
+
+        // when
+        List<PostResponse> post = postService.getList();
+
+        // then
+        assertEquals(2L, post.size());
     }
 }
