@@ -3,6 +3,7 @@ package com.otaku.api.service;
 import com.otaku.api.domain.Post;
 import com.otaku.api.repository.PostRepository;
 import com.otaku.api.request.PostCreate;
+import com.otaku.api.request.PostSearch;
 import com.otaku.api.response.PostResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -39,9 +40,9 @@ public class PostService {
                 .build();
     }
 
-    public List<PostResponse> getList(Pageable pageable) {
+    public List<PostResponse> getList(PostSearch postSearch) {
 
-        return postRepository.findAll(pageable).stream()
+        return postRepository.getList(postSearch).stream()
                 .map(PostResponse::new)
                 .collect(Collectors.toList());
     }

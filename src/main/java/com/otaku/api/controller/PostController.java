@@ -2,6 +2,7 @@ package com.otaku.api.controller;
 
 import com.otaku.api.domain.Post;
 import com.otaku.api.request.PostCreate;
+import com.otaku.api.request.PostSearch;
 import com.otaku.api.response.PostResponse;
 import com.otaku.api.service.PostService;
 import jakarta.servlet.http.HttpServletResponse;
@@ -34,7 +35,7 @@ public class PostController {
     }
 
     @GetMapping("/posts")
-    public List<PostResponse> getList(Pageable pageable) {
-        return postService.getList(pageable);
+    public List<PostResponse> getList(@ModelAttribute PostSearch postSearch) {
+        return postService.getList(postSearch);
     }
 }

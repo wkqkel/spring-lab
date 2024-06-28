@@ -3,6 +3,7 @@ package com.otaku.api.service;
 import com.otaku.api.domain.Post;
 import com.otaku.api.repository.PostRepository;
 import com.otaku.api.request.PostCreate;
+import com.otaku.api.request.PostSearch;
 import com.otaku.api.response.PostResponse;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -88,14 +89,16 @@ class PostServiceTest {
                 .toList();
         postRepository.saveAll(requestPosts);
 
-        Pageable pageable = PageRequest.of(0, 5, DESC, "id");
+        PostSearch postSearch = PostSearch.builder()
+                .page(1)
+                .build();
 
         // when
-        List<PostResponse> post = postService.getList(pageable);
+        List<PostResponse> post = postService.getList(postSearch);
 
         // then
-        assertEquals(5L, post.size());
+        assertEquals(10L, post.size());
         assertEquals("제목 - 30", post.get(0).getTitle());
-        assertEquals("제목 - 26", post.get(4).getTitle());
+        assertEquals("제목 - 21", post.get(9).getTitle());
     }
 }
