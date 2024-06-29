@@ -3,6 +3,7 @@ package com.otaku.api.service;
 import com.otaku.api.domain.Post;
 import com.otaku.api.repository.PostRepository;
 import com.otaku.api.request.PostCreate;
+import com.otaku.api.request.PostEdit;
 import com.otaku.api.request.PostSearch;
 import com.otaku.api.response.PostResponse;
 import org.junit.jupiter.api.Assertions;
@@ -100,5 +101,55 @@ class PostServiceTest {
         assertEquals(10L, post.size());
         assertEquals("제목 - 30", post.get(0).getTitle());
         assertEquals("제목 - 21", post.get(9).getTitle());
+    }
+
+    @Test
+    @DisplayName("글 제목 수정")
+    void test4() {
+        // given
+        Post post = Post.builder()
+                .title("제목")
+                .content("내용")
+                .build();
+        postRepository.save(post);
+
+        PostEdit postEdit = PostEdit.builder()
+                .title("제목변경")
+                .content("내용")
+                .build();
+
+        // when
+        postService.edit(post.getId(), postEdit);
+
+        // then
+        Post changedPost = postRepository.findById(post.getId())
+                .orElseThrow(() -> new RuntimeException("글이 존재하지않습니다. id=" + post.getId()));
+        assertEquals("제목변경", changedPost.getTitle());
+        assertEquals("내용", changedPost.getContent());
+    }
+
+    @Test
+    @DisplayName("글 내용 수정")
+    void test5() {
+        // given
+        Post post = Post.builder()
+                .title("제목")
+                .content("내용")
+                .build();
+        postRepository.save(post);
+
+        PostEdit postEdit = PostEdit.builder()
+                .title("제목")
+                .content("내용변경")
+                .build();
+
+        // when
+        postService.edit(post.getId(), postEdit);
+
+        // then
+        Post changedPost = postRepository.findById(post.getId())
+                .orElseThrow(() -> new RuntimeException("글이 존재하지않습니다. id=" + post.getId()));
+        assertEquals("제목", changedPost.getTitle());
+        assertEquals("내용변경", changedPost.getContent());
     }
 }

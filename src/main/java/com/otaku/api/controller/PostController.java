@@ -2,9 +2,11 @@ package com.otaku.api.controller;
 
 import com.otaku.api.domain.Post;
 import com.otaku.api.request.PostCreate;
+import com.otaku.api.request.PostEdit;
 import com.otaku.api.request.PostSearch;
 import com.otaku.api.response.PostResponse;
 import com.otaku.api.service.PostService;
+import jakarta.persistence.PostUpdate;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -37,5 +39,10 @@ public class PostController {
     @GetMapping("/posts")
     public List<PostResponse> getList(@ModelAttribute PostSearch postSearch) {
         return postService.getList(postSearch);
+    }
+
+    @PatchMapping("/post/{postId}")
+    public void edit(@PathVariable Long postId, @RequestBody @Valid PostEdit postEdit) {
+        postService.edit(postId, postEdit);
     }
 }
