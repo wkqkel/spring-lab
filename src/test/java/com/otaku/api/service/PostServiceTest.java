@@ -139,7 +139,7 @@ class PostServiceTest {
         postRepository.save(post);
 
         PostEdit postEdit = PostEdit.builder()
-                .title("제목")
+                .title(null)
                 .content("내용변경")
                 .build();
 

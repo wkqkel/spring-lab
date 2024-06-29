@@ -62,5 +62,6 @@ public class PostService {
                 ).content(postEdit.getContent()).build();
 
         post.edit(postEditor);
+
     }
 }
