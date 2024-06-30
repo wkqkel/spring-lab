@@ -2,6 +2,7 @@ package com.otaku.api.service;
 
 import com.otaku.api.domain.Post;
 import com.otaku.api.domain.PostEditor;
+import com.otaku.api.exception.PostNotFound;
 import com.otaku.api.repository.PostRepository;
 import com.otaku.api.request.PostCreate;
 import com.otaku.api.request.PostEdit;
@@ -36,7 +37,7 @@ public class PostService {
 
     public PostResponse get(Long id) {
         Post post = postRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 글입니다."));
+                .orElseThrow(PostNotFound::new);
         return PostResponse.builder()
                 .id(post.getId())
                 .title(post.getTitle())
@@ -53,7 +54,7 @@ public class PostService {
     @Transactional
     public void edit(Long id, PostEdit postEdit) {
         Post post = postRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("존재하지않는 글입니다"));
+                .orElseThrow(PostNotFound::new);
 
         PostEditor.PostEditorBuilder editorBuilder = post.toEditor();
 
@@ -67,7 +68,7 @@ public class PostService {
 
     public void delete(Long id) {
         Post post = postRepository.findById(id).orElseThrow(
-                ()-> new IllegalArgumentException("존재하지 않는 글입니다."));
+                PostNotFound::new);
 
         postRepository.delete(post);
     }

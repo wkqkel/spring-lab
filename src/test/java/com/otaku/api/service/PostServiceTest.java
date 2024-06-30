@@ -1,6 +1,7 @@
 package com.otaku.api.service;
 
 import com.otaku.api.domain.Post;
+import com.otaku.api.exception.PostNotFound;
 import com.otaku.api.repository.PostRepository;
 import com.otaku.api.request.PostCreate;
 import com.otaku.api.request.PostEdit;
@@ -154,7 +155,7 @@ class PostServiceTest {
     }
 
     @Test
-    @DisplayName("테스트 삭제")
+    @DisplayName("게시글 삭제")
     void test6() {
         // given
         Post post = Post.builder()
@@ -168,5 +169,59 @@ class PostServiceTest {
 
         // then
         Assertions.assertEquals(0, postRepository.count());
+    }
+
+    @Test
+    @DisplayName("글 1개 조회 - 존재하지 않는 글")
+    void test7() {
+        // given
+        Post post = Post.builder()
+                .title("foo")
+                .content("bar")
+                .build();
+        postRepository.save(post);
+        Long postId = post.getId();
+
+        // expected
+         Assertions.assertThrows(PostNotFound.class, ()->{
+            postService.get(postId + 1L);
+        });
+    }
+
+    @Test
+    @DisplayName("글 내용 수정 - 존재하지 않는 글")
+    void test8() {
+        // given
+        Post post = Post.builder()
+                .title("제목")
+                .content("내용")
+                .build();
+        postRepository.save(post);
+
+        PostEdit postEdit = PostEdit.builder()
+                .title(null)
+                .content("내용변경")
+                .build();
+
+        // expected
+        Assertions.assertThrows(PostNotFound.class,()->{
+            postService.edit(post.getId() + 1L, postEdit);
+        });
+    }
+
+    @Test
+    @DisplayName("게시글 삭제 - 존재하지않는 글")
+    void test9() {
+        // given
+        Post post = Post.builder()
+                .title("제목")
+                .content("내용")
+                .build();
+        postRepository.save(post);
+
+        // expected
+        Assertions.assertThrows(PostNotFound.class,()->{
+            postService.delete(post.getId() + 1L);
+        });
     }
 }
