@@ -1,23 +1,18 @@
 package com.otaku.api.controller;
 
-import com.otaku.api.domain.Post;
+import com.otaku.api.exception.InvalidRequest;
 import com.otaku.api.request.PostCreate;
 import com.otaku.api.request.PostEdit;
 import com.otaku.api.request.PostSearch;
 import com.otaku.api.response.PostResponse;
 import com.otaku.api.service.PostService;
-import jakarta.persistence.PostUpdate;
-import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.web.PageableDefault;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Map;
 
 @Slf4j
 @RestController
@@ -28,6 +23,7 @@ public class PostController {
 
     @PostMapping("/posts")
     public void post(@RequestBody @Valid PostCreate request) {
+        request.validate();
         postService.write(request);
     }
 
@@ -41,12 +37,12 @@ public class PostController {
         return postService.getList(postSearch);
     }
 
-    @PatchMapping("/post/{postId}")
+    @PatchMapping("/posts/{postId}")
     public void edit(@PathVariable Long postId, @RequestBody @Valid PostEdit postEdit) {
         postService.edit(postId, postEdit);
     }
 
-    @DeleteMapping("/post/{postId}")
+    @DeleteMapping("/posts/{postId}")
     public void delete(@PathVariable Long postId) {
         postService.delete(postId);
     }
